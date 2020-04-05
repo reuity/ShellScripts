@@ -17,15 +17,14 @@ fi
 abc=$1
 
 case $abc in
-"clean")
-    # clean up
+"clean") # clean up
     sed -i "/^[^#]/{/JAVA_HOME/d}" /etc/profile
     # get jdk's real dirname
     link=$(expr "$(ls -ld ${baseDir}/jdk)" : '.*-> \(.*\)$')
     rm -rf ${baseDir}/jdk ${link}
     echo "Cleaned Up"
     ;;
-*)
+*) # install jdk in ${baseDir}
     # get jdk's dirname
     fileName=$(tar -tf $1 | head -1 | cut -d/ -f1)
     mkdir -p ${baseDir}
@@ -33,20 +32,19 @@ case $abc in
         echo "jdk has already installed!"
         exit 1
     else
-        # install jdk in ${baseDir}
         echo "Installing..."
         tar -zxf $1 -C ${baseDir}
         ln -snf ${baseDir}/${fileName} ${baseDir}/jdk
         sed -i "/^[^#]/{/JAVA_HOME/d}" /etc/profile
-        echo -e "\nexport JAVA_HOME=${baseDir}/jdk\n"\
-            "export PATH=\$JAVA_HOME/bin:\$PATH\n"\
-            "export CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >>/etc/profile
+        echo -e "\nexport JAVA_HOME=${baseDir}/jdk" \
+            "\nexport PATH=\$JAVA_HOME/bin:\$PATH" \
+            "\nexport CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >>/etc/profile
     fi
     chown -R ${user}.${group} ${baseDir}/jdk
     ${baseDir}/jdk/bin/java -version
-    echo -e "Successfully.\n"\
-        " jdk in : ${baseDir}/${fileName}\n"\
-        "softlink: ${baseDir}/jdk\n"\
-        "run: source /etc/profile"
+    echo -e "Successfully." \
+        "\n jdk in : ${baseDir}/${fileName}" \
+        "\nsoftlink: ${baseDir}/jdk" \
+        "\nrun: source /etc/profile"
     ;;
 esac
