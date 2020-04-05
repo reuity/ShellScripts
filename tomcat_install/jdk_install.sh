@@ -31,7 +31,7 @@ case $abc in
         echo "jdk has already installed!"
         exit 1
     else
-        #install jdk in ${baseDir}
+        # install jdk in ${baseDir}
         echo "Installing..."
         tar -zxf $1 -C ${baseDir}
         ln -snf ${baseDir}/${fileName} ${baseDir}/jdk
