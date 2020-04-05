@@ -47,6 +47,7 @@ case $abc in
     java -version
     echo "Successfully.\n" \
         " jdk in : ${baseDir}/${fileName}\n" \
-        "softlink: ${baseDir}/jdk\n"
+        "softlink: ${baseDir}/jdk\n" \
+        "run: source /etc/profile\n"
     ;;
 esac
