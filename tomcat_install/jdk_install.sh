@@ -5,37 +5,48 @@ set -e
 #=====================#
 user=wls81
 group=wls
-baseDir=/user/local
+baseDir=/usr/local
 #=====================#
 
 # check_usage
 if [ $# -ne 1 ]; then
-    echo "Usage: $0 jdkPKG"
+    echo "Usage: $0 JDKPKG|clean"
     exit 1
 fi
 
-# get jdk's dirname
-fileName=$(tar -tf $1 | head -1 | cut -d/ -f1)
-mkdir -p ${baseDir}
+abc=$1
 
-if ( (java -version &>/dev/null) || (${baseDir}/jdk/bin/java -version &>/dev/null)); then
-    echo "jdk has already installed!"
-    exit 1
-else
-    #install jdk in ${baseDir}
-    echo "Extracting..."
-    tar -zxf $1 -C ${baseDir}
-    ln -snf ${baseDir}/${fileName} ${baseDir}/jdk
+case $abc in
+"clean")
+    # clean up
     sed -i "/^[^#]/{/JAVA_HOME/d}" /etc/profile
-    echo -e "
-export JAVA_HOME=${baseDir}/jdk
-export PATH=\$JAVA_HOME/bin:\$PATH
-export CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar
-" >>/etc/profile
-fi
+    rm -rf ${baseDir}/${fileName} ${baseDir}/jdk
+    source /etc/profile
+    echo "Cleaned Up"
+    ;;
+*)
+    # get jdk's dirname
+    fileName=$(tar -tf $1 | head -1 | cut -d/ -f1)
+    mkdir -p ${baseDir}
 
-source /etc/profile
-chown -R ${user}.${group} ${baseDir}/jdk
-java -version
-echo " jdk in : ${baseDir}/${fileName}
-softlink: ${baseDir}/jdk"
+    if ( (java -version &>/dev/null) || (${baseDir}/jdk/bin/java -version &>/dev/null)); then
+        echo "jdk has already installed!"
+        exit 1
+    else
+        #install jdk in ${baseDir}
+        echo "Installing..."
+        tar -zxf $1 -C ${baseDir}
+        ln -snf ${baseDir}/${fileName} ${baseDir}/jdk
+        sed -i "/^[^#]/{/JAVA_HOME/d}" /etc/profile
+        echo -e "\nexport JAVA_HOME=${baseDir}/jdk" \
+            "\nexport PATH=\$JAVA_HOME/bin:\$PATH" \
+            "\nexport CLASSPATH=.:\$JAVA_HOME/lib/dt.jar:\$JAVA_HOME/lib/tools.jar" >>/etc/profile
+    fi
+    source /etc/profile
+    chown -R ${user}.${group} ${baseDir}/jdk
+    java -version
+    echo "Successfully." \
+        " jdk in : ${baseDir}/${fileName}" \
+        "softlink: ${baseDir}/jdk"
+    ;;
+esac
