@@ -45,8 +45,8 @@ case $abc in
     source /etc/profile
     chown -R ${user}.${group} ${baseDir}/jdk
     java -version
-    echo "Successfully." \
-        " jdk in : ${baseDir}/${fileName}" \
-        "softlink: ${baseDir}/jdk"
+    echo "Successfully.\n" \
+        " jdk in : ${baseDir}/${fileName}\n" \
+        "softlink: ${baseDir}/jdk\n"
     ;;
 esac
