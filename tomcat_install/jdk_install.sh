@@ -42,7 +42,7 @@ case $abc in
     fi
     chown -R ${user}.${group} ${baseDir}/jdk
     ${baseDir}/jdk/bin/java -version
-    echo "Successfully.\n" \
+    echo -e "Successfully.\n" \
         " jdk in : ${baseDir}/${fileName}\n" \
         "softlink: ${baseDir}/jdk\n" \
         "run: source /etc/profile\n"
