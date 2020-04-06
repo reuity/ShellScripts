@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-# Variables
+
+# VARIABLES
 #==========================================#
 user=wls81
 group=wls
