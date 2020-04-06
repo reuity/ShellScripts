@@ -17,11 +17,9 @@ if [[ $1 -gt 4 && $1 -lt 9 || $# != 3 ]]; then
     exit 1
 fi
 
-# install_jdk
+# install_jdk function
 install_jdk() {
-    if ! java -version &>/dev/null && ! ${baseDir}/jdk/bin/java -version &>/dev/null; then
-        /bin/bash ${scriptDir}/jdk_install.sh ${jdkPKG}
-    fi
+    /bin/bash ${scriptDir}/jdk_install.sh ${jdkPKG}
 }
 
 appName=$2
