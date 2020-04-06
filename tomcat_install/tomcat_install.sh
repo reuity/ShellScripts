@@ -61,10 +61,10 @@ if [[ ! -f ${userHome}/shell/tomkill.sh ]]; then
     chown -R ${user}.${group} ${userHome}/shell
 fi
 
-\cp t#_restart.sh ${userHome}/t$1_restart.sh
-sed -i s@\$appName@${appName}@g ${userHome}/t$1_restart.sh
-sed -i s@\$logDir@${logDir}@g ${userHome}/t$1_restart.sh
-chmod +x ${userHome}/t$1_restart.sh
-chown -R ${user}.${group} ${userHome}/t$1_restart.sh
+\cp t#_restart.sh ${userHome}/t$1_${appName}_restart.sh
+sed -i s@\$appName@${appName}@g ${userHome}/t$1_${appName}_restart.sh
+sed -i s@\$logDir@${logDir}@g ${userHome}/t$1_${appName}_restart.sh
+chmod +x ${userHome}/t$1_${appName}_restart.sh
+chown -R ${user}.${group} ${userHome}/t$1_${appName}_restart.sh
 
 echo "tomcat_${appName} install successfully!"
