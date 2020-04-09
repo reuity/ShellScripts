@@ -4,14 +4,14 @@ INSTALL_USER="mysql"
 PORT=3306
 DATA_HOME=/data/mysql
 BACKUP_HOME=/data/backup
-SCRIPT_HOME=/data/xjk/shell
-INSTALL_FILE="/data/xjk/software/mysql-5.7.*.tar.gz"
+SCRIPT_HOME=/data/shell
+INSTALL_FILE="/data/software/mysql/mysql-5.7.*.tar.gz"
 INSTALL_FOLDER="/usr/local/mysql"
 ROOT_PWD="root123"
 START_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 
 echo "###step 1： create install group and user"
-yum install libaio libaio-devel
+yum install -y libaio libaio-devel
 groupadd mysql
 useradd -r -g mysql -s /bin/false mysql
 
@@ -32,7 +32,7 @@ mv mysql*-x86_64 mysql
 chown -R mysql.mysql /usr/local/mysql
 
 echo "###step 5: initialize mysql"
-cd ${INSTALL_FOLDER}
+cd ${INSTALL_FOLDER}/bin
 ./mysqld --defaults-file=/etc/my.cnf --initialize --user=mysql --basedir=${INSTALL_FOLDER} --datadir=${DATA_HOME}
 if [ $? -eq 0 ]; then
 	echo $(date +'%Y-%m-%d %H:%M:%S')" initialize mysql completed"
