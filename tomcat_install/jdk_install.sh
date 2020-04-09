@@ -14,9 +14,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-abc=$1
-
-case $abc in
+case $1 in
 "clean") # clean up
     sed -i "/^[^#]/{/JAVA_HOME/d}" /etc/profile
     # get jdk's real dirname
