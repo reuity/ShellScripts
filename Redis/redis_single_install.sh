@@ -16,15 +16,19 @@ if [ $# -ne 2 ]; then
 	exit 1
 fi
 
+# create directory
+mkdir -p ${baseDir}/redis${R_PORT}/conf
+mkdir -p ${logDir}/redis${R_PORT}
+mkdir -p ${dataDir}/redis${R_PORT}
+
+# compile and install
 R_PORT=$2
 fileName=$(tar -tf $1 | head -1 | cut -d/ -f1)
 tar -zxf ./$1
 cd ${fileName}
 make PREFIX=${baseDir}/redis${R_PORT} install
-mkdir -p ${baseDir}/redis${R_PORT}/conf
-mkdir -p ${logDir}/redis${R_PORT}
-mkdir -p ${dataDir}/redis${R_PORT}
 
+# config file
 echo -e "port ${R_PORT}
 daemonize yes
 bind 0.0.0.0
@@ -36,5 +40,5 @@ dbfilename \"dump${R_PORT}.rdb\"
 save 900 1
 save 300 10
 save 60 10000" >${baseDir}/redis${R_PORT}/conf/redis${R_PORT}.conf
-echo "Installed.
-run: ${baseDir}/redis${R_PORT}/bin/redis-server ${baseDir}/redis${R_PORT}/conf/redis${R_PORT}.conf"
+echo "Installed Successfully.
+run: ${baseDir}/redis${R_PORT}/bin/redis-server ${FF}/redis${R_PORT}/conf/redis${R_PORT}.conf"
