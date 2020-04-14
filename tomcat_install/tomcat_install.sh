@@ -6,9 +6,9 @@ set -e
 user=wls81
 group=wls
 jdkPKG=jdk-8u91-linux-x64.tar.gz
-baseDir=/apphome/soft
-logDir=/apphome/logs/tomcat_${appName}
-repoDir=/apphome/xjk/tomcat/${appName}
+baseDir=/usr/local
+logDir=/data/logs/tomcat_${appName}
+repoDir=/data/repository/tomcat/${appName}
 #==========================================#
 
 # check_usage
@@ -20,9 +20,10 @@ fi
 
 # install_jdk function
 install_jdk() {
-    /bin/bash ${scriptDir}/jdk_install.sh ${jdkPKG}
+    /bin/bash ${workDir}/jdk_install.sh ${jdkPKG}
 }
 
+workDir=$(dirname $0)
 appName=$2
 package=$3
 
@@ -30,13 +31,13 @@ tomcatDir=${baseDir}/tomcat_${appName}
 mkdir -p ${baseDir} ${logDir} ${repoDir}
 
 fileName=$(tar -tf ${package} | head -1 | cut -d/ -f1)
-scriptDir=$(dirname $0)
+
 install_jdk
-mkdir -p $scriptDir/temp
-tar --skip-old-files -zxf ${package} -C $scriptDir/temp
+mkdir -p ${workDir}/temp
+tar --skip-old-files -zxf ${package} -C ${workDir}/temp
 
 if [[ ! -d ${tomcatDir} ]]; then
-    \cp -r $scriptDir/temp/$fileName ${tomcatDir}
+    \cp -r ${workDir}/temp/${fileName} ${tomcatDir}
 else
     echo -e "${tomcatDir} is already exist!" && exit 1
 fi
@@ -50,7 +51,7 @@ sed -i s@\$appBase_DEF@${repoDir}@g ${tomcatDir}/conf/server.xml
 chown -R ${user}.${group} ${baseDir} ${logDir}
 
 # create restart script
-userHome=$(cat /etc/passwd | grep $user | cut -d: -f 6)
+userHome=$(cat /etc/passwd | grep ${user} | cut -d: -f 6)
 
 if [[ ! -f ${userHome}/shell/tomkill.sh ]]; then
     mkdir -p ${userHome}/shell
