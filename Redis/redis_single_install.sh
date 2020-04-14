@@ -28,7 +28,7 @@ mkdir -p ${dataDir}/redis${R_PORT}
 echo -e "port ${R_PORT}
 daemonize yes
 bind 0.0.0.0
-requirepass qwer1234
+requirepass qwer@1234
 loglevel warning
 logfile \"${logDir}/redis${R_PORT}/redis${R_PORT}.log\"
 dir \"${dataDir}/redis${R_PORT}\"
