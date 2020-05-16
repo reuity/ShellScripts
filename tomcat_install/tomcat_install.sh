@@ -3,9 +3,9 @@ set -e
 
 # VARIABLES
 #==========================================#
-user=wls81
-group=wls
-jdkPKG=jdk-8u91-linux-x64.tar.gz
+user=yq94
+group=yq
+jdkPKG=jdk-8u212-linux-x64.tar.gz
 baseDir=/usr/local
 logDir=/data/logs/tomcat_${appName}
 repoDir=/data/repository/tomcat/${appName}
