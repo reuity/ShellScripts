@@ -28,7 +28,7 @@ case $1 in
     mkdir -p ${baseDir}
     if ( (java -version &>/dev/null) || (${baseDir}/jdk/bin/java -version &>/dev/null)); then
         echo "jdk has already installed!"
-        return 0
+        exit 0
     else
         echo "Installing..."
         tar -zxf $1 -C ${baseDir}

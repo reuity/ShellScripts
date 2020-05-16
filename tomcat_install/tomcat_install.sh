@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+workDir=$(dirname $0)
+appName=$2
+package=$3
+
 # VARIABLES
 #==========================================#
 user=yq94
@@ -13,7 +17,7 @@ repoDir=/data/repository/tomcat/${appName}
 
 # check_usage
 if [[ $1 -gt 4 && $1 -lt 9 || $# != 3 ]]; then
-    echo -e "Usage: $0 num(<=3) $appName $tomcatPKG
+    echo -e "Usage: $0 num(<=3) appName tomcatPKG
     Port=8080+num"
     exit 1
 fi
@@ -35,6 +39,8 @@ fileName=$(tar -tf ${package} | head -1 | cut -d/ -f1)
 install_jdk
 mkdir -p ${workDir}/temp
 tar --skip-old-files -zxf ${package} -C ${workDir}/temp
+\cp -r tomcat_conf/conf/server.xml ${workDir}/temp/${fileName}/conf
+\cp -r tomcat_conf/bin/catalina.sh ${workDir}/temp/${fileName}/bin
 
 if [[ ! -d ${tomcatDir} ]]; then
     \cp -r ${workDir}/temp/${fileName} ${tomcatDir}
@@ -48,7 +54,7 @@ sed -i s/\$HTTPPORT/$((8080 + $1))/g ${tomcatDir}/conf/server.xml
 sed -i s/\$AJPPORT/$((8009 + $1))/g ${tomcatDir}/conf/server.xml
 sed -i s/\$HTTPSPORT/8443/g ${tomcatDir}/conf/server.xml
 sed -i s@\$appBase_DEF@${repoDir}@g ${tomcatDir}/conf/server.xml
-chown -R ${user}.${group} ${baseDir} ${logDir}
+chown -R ${user}.${group} ${tomcatDir} ${logDir}
 
 # create restart script
 userHome=$(cat /etc/passwd | grep ${user} | cut -d: -f 6)
