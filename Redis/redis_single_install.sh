@@ -3,8 +3,8 @@ set -e
 
 # VARIABLES
 #=====================#
-user=wls81
-group=wls
+user=yq94
+group=yq
 baseDir=/usr/local
 dataDir=/data
 logDir=/data/logs
