@@ -1,3 +1,11 @@
+# 删除空行和注释行
+sed "/^[ \t]*\(#.*\)\?$/d"   nginx.conf
+# 最小匹配{}，提取upstream和location段
+cat nginx.conf |grep -Pzoe "(upstream|location).*{[^}]*}"
+# 匹配所有字符
+(.|\n)*
+
+
 sed "/^\s*\($\|#\)/d" nginx.conf | grep -Pzoe "(upstream|location).*{[^}]*}" | sed "/\(upstream\|server\|location\|proxy_pass\)/!d" | sed "/proxy_next_upstream/d"  > nginx.conf1
 
 awk '{ for(i=1;i<=NF;i++)a[NR,i]=$i }
