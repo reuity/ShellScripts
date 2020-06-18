@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e 
 # 0 下载源码包
 
 # 1 安装依赖包
@@ -21,7 +23,6 @@ mkdir -p /data/postgres
 chown postgres. /data/postgres
 
 # 4 设置PG环境变量
-su - postgres
 echo "export PGHOME=/usr/local/pgsql" >> /home/postgres/.bash_profile
 echo "export PGDATA=/data/postgres" >> /home/postgres/.bash_profile
 echo "export PATH=$PATH:/usr/local/pgsql/bin" >> /home/postgres/.bash_profile
@@ -39,7 +40,7 @@ mkdir -p /data/postgres/archived_log /data/postgres/pg_log
 
 # 7 修改PG参数配置（用附件postgresql.conf替换,port,shared_buffers等根据实际情况修改）
 cd /data/postgres
-chown postgres. postgresql.configure
+chown postgres. postgresql.conf
 more postgresql.conf
 
 # 8 启动PG
