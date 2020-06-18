@@ -47,7 +47,7 @@ chown postgres. postgresql.conf
 more postgresql.conf
 
 # 8 启动PG
-/usr/local/pgsql/bin/pg_ctl -D /data/postgres -l logfile start
+su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /data/postgres -l logfile start'
 
 # 9 连接测试
 # pgsql
