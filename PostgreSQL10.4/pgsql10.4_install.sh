@@ -61,20 +61,3 @@ rm -rf /var/spool/mail/postgres
 rm -rf /data/postgres
 rm -rf /usr/local/pgsql
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
