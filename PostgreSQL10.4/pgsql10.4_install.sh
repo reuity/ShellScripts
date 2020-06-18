@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e 
 # 0 下载源码包
-mkdir -p /data/xjk/software
-cd /data/xjk/software
+mkdir -p /data/xjk/software/pgsql
+cd /data/xjk/software/pgsql
 
 # 1 安装依赖包
 yum install -y cmake gcc-c++ openssl-devel perl-ExtUtils-Embed readline-devel zlib-devel pam-devel libxml2-devel libxslt-devel openldap-devel python python-devel
 
 
 # 2 解压源码包
-cd /data/xjk/software 
+cd /data/xjk/software/pgsql 
 tar -zxf postgresql-10.4.tar.gz
 
 cd postgresql-10.4
@@ -31,7 +31,7 @@ echo "export PATH=$PATH:/usr/local/pgsql/bin" >> /home/postgres/.bash_profile
 echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib" >> /home/postgres/.bash_profile
 
 # 5 安装使用工具插件
-cd /data/xjk/software/postgresql-10.4/contrib
+cd /data/xjk/software/pgsql/postgresql-10.4/contrib
 make -j `nproc`
 make install
 
@@ -42,7 +42,7 @@ chown postgres. /data/postgres/archived_log /data/postgres/pg_log
 
 # 7 修改PG参数配置（用附件postgresql.conf替换,port,shared_buffers等根据实际情况修改）
 cd /data/postgres
-\cp -rp /data/xjk/software/postgresql.conf .
+\cp -rp /data/xjk/software/pgsql/postgresql.conf .
 chown postgres. postgresql.conf
 more postgresql.conf
 
