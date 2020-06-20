@@ -18,7 +18,7 @@ if [ $# -ne 2 ]; then
 fi
 
 PORT=$2
-scriptDIR=$(dirname $(readlink -f $0))
+workDIR=$(dirname $(readlink -f $0))
 
 # create directory
 mkdir -p ${BaseDir}/redis${PORT}/etc
@@ -32,7 +32,7 @@ cd ${fileName}
 make -j $(nproc) PREFIX=${BaseDir}/redis${PORT} install
 
 # config file
-\cp -f ${scriptDIR}/redis.conf ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
+\cp -f ${workDIR}/redis.conf ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
 sed -i "s/-{PASSWORD}-/${password}/g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
 sed -i "s/-{PORT}-/${PORT}/g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
 sed -i "s#-{DATADIR}-#${DataDir}/redis${PORT}#g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
