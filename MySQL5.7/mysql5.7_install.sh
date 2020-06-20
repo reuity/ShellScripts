@@ -4,21 +4,21 @@ INSTALL_USER="mysql"
 PORT=3306
 DATA_HOME=/data/mysql
 BACKUP_HOME=/data/backup
-SCRIPT_HOME=/data/shell
-INSTALL_FILE="/data/software/mysql/mysql-5.7.*.tar.gz"
+SCRIPT_HOME=/data/ops/shell
+INSTALL_FILE="/data/ops/software/mysql/mysql-5.7.*.tar.gz"
 INSTALL_FOLDER="/usr/local/mysql"
 ROOT_PWD="root123"
 START_TIME=$(date +'%Y-%m-%d %H:%M:%S')
 
 echo "###step 1： create install group and user"
 yum install -y libaio libaio-devel
-groupadd mysql
-useradd -r -g mysql -s /bin/false mysql
+groupadd ${INSTALL_GROUP}
+useradd -r -g ${INSTALL_GROUP} -s /bin/false ${INSTALL_USER}
 
 echo "###step 2: create mysql data & log folder"
 mkdir -p ${DATA_HOME}
 chmod -R 770 ${DATA_HOME}
-chown -R mysql.mysql ${DATA_HOME}
+chown -R ${INSTALL_USER}.${INSTALL_GROUP} ${DATA_HOME}
 mkdir -p ${BACKUP_HOME}
 mkdir -p ${SCRIPT_HOME}
 
@@ -29,11 +29,11 @@ echo "###step 4: unzip install file"
 cd /usr/local
 tar -zxf ${INSTALL_FILE}
 mv mysql*-x86_64 mysql
-chown -R mysql.mysql /usr/local/mysql
+chown -R ${INSTALL_USER}.${INSTALL_GROUP}/usr/local/mysql
 
 echo "###step 5: initialize mysql"
 cd ${INSTALL_FOLDER}/bin
-./mysqld --defaults-file=/etc/my.cnf --initialize --user=mysql --basedir=${INSTALL_FOLDER} --datadir=${DATA_HOME}
+./mysqld --defaults-file=/etc/my.cnf --initialize --user=${INSTALL_USER} --basedir=${INSTALL_FOLDER} --datadir=${DATA_HOME}
 if [ $? -eq 0 ]; then
 	echo $(date +'%Y-%m-%d %H:%M:%S')" initialize mysql completed"
 else

@@ -1,44 +1,48 @@
 #!/bin/bash
-set -e
+set -e -u
 
 # VARIABLES
 #=====================#
-user=yq94
-group=yq
-baseDir=/usr/local
-dataDir=/data
-logDir=/data/logs
+user=root
+group=root
+password=qwer@1234   
+BaseDir=/usr/local
+DataDir=/data
+LogDir=/data/logs
 #=====================#
 
 # check_usage
 if [ $# -ne 2 ]; then
-	echo "Usage: $0  PKG  PORT"
-	exit 1
+    echo "Usage: $0  PKG  PORT"
+    exit 1
 fi
 
+PORT=$2
+scriptDIR=$(dirname $(readlink -f $0))
+
 # create directory
-mkdir -p ${baseDir}/redis${R_PORT}/conf
-mkdir -p ${logDir}/redis${R_PORT}
-mkdir -p ${dataDir}/redis${R_PORT}
+mkdir -p ${BaseDir}/redis${PORT}/etc
+mkdir -p ${DataDir}/redis${PORT}
+mkdir -p ${LogDir}/redis
 
 # compile and install
-R_PORT=$2
 fileName=$(tar -tf $1 | head -1 | cut -d/ -f1)
 tar -zxf ./$1
 cd ${fileName}
-make PREFIX=${baseDir}/redis${R_PORT} install
+make -j $(nproc) PREFIX=${BaseDir}/redis${PORT} install
 
 # config file
-echo -e "port ${R_PORT}
-daemonize yes
-bind 0.0.0.0
-requirepass qwer@1234
-loglevel warning
-logfile \"${logDir}/redis${R_PORT}/redis${R_PORT}.log\"
-dir \"${dataDir}/redis${R_PORT}\"
-dbfilename \"dump${R_PORT}.rdb\"
-save 900 1
-save 300 10
-save 60 10000" >${baseDir}/redis${R_PORT}/conf/redis${R_PORT}.conf
-echo "Installed Successfully.
-run: ${baseDir}/redis${R_PORT}/bin/redis-server ${FF}/redis${R_PORT}/conf/redis${R_PORT}.conf"
+\cp -f ${scriptDIR}/redis.conf ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
+sed -i "s/-{PASSWORD}-/${password}/g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
+sed -i "s/-{PORT}-/${PORT}/g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
+sed -i "s#-{DATADIR}-#${DataDir}/redis${PORT}#g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
+
+# chown directory
+chown -R ${user}.${group} ${BaseDir}/redis${PORT}
+chown -R ${user}.${group} ${DataDir}/redis${PORT}
+chown -R ${user}.${group} ${LogDir}/redis
+echo "Installed Successfully."
+
+# start redis
+su - ${user} -c "${BaseDir}/redis${PORT}/bin/redis-server ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf"
+echo "Started."
