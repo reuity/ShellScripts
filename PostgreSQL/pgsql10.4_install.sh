@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e 
+set -e -u
 # 0 下载源码包
 mkdir -p /data/xjk/software
 cd /data/xjk/software
@@ -20,9 +20,9 @@ make install
 # 3 创建PG用户和目录
 groupadd postgres
 useradd -g postgres postgres
-chown -R postgres. /usr/local/pgsql
+chown -R postgres.postgres /usr/local/pgsql
 mkdir -p /data/postgres
-chown postgres. /data/postgres
+chown postgres.postgres /data/postgres
 
 # 4 设置PG环境变量
 echo "export PGHOME=/usr/local/pgsql" >> /home/postgres/.bash_profile
@@ -38,13 +38,12 @@ make install
 # 6 初始化PG数据库
 su - postgres -c '/usr/local/pgsql/bin/initdb -D /data/postgres -E UTF8 --local=en_US.utf8'
 mkdir -p /data/postgres/archived_log /data/postgres/pg_log
-chown postgres. /data/postgres/archived_log /data/postgres/pg_log
+chown postgres.postgres /data/postgres/archived_log /data/postgres/pg_log
 
 # 7 修改PG参数配置（用附件postgresql.conf替换,port,shared_buffers等根据实际情况修改）
 cd /data/postgres
-\cp -rp /data/xjk/software/postgresql.conf .
-chown postgres. postgresql.conf
-more postgresql.conf
+\cp -rp /data/xjk/software/postgresql10.4.conf ./postgresql.conf
+chown postgres.postgres postgresql.conf
 
 # 8 启动PG
 /usr/local/pgsql/bin/pg_ctl -D /data/postgres -l logfile start

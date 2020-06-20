@@ -23,7 +23,7 @@ mkdir -p ${BACKUP_HOME}
 mkdir -p ${SCRIPT_HOME}
 
 echo "###step 3: configure /etc/my.cnf"
-\cp -f ./my.cnf /etc/my.cnf
+\cp -f ./my5.7.cnf /etc/my.cnf
 
 echo "###step 4: unzip install file"
 cd /usr/local

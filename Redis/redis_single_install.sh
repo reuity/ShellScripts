@@ -6,9 +6,9 @@ set -e -u
 user=root
 group=root
 password=qwer@1234   
-BaseDir=/usr/local
-DataDir=/data
-LogDir=/data/logs
+baseDir=/usr/local
+dataDir=/data
+logDir=/data/logs
 #=====================#
 
 # check_usage
@@ -21,28 +21,28 @@ PORT=$2
 workDIR=$(dirname $(readlink -f $0))
 
 # create directory
-mkdir -p ${BaseDir}/redis${PORT}/etc
-mkdir -p ${DataDir}/redis${PORT}
-mkdir -p ${LogDir}/redis
+mkdir -p ${baseDir}/redis${PORT}/etc
+mkdir -p ${dataDir}/redis${PORT}
+mkdir -p ${logDir}/redis
 
 # compile and install
 fileName=$(tar -tf $1 | head -1 | cut -d/ -f1)
 tar -zxf ./$1
 cd ${fileName}
-make -j $(nproc) PREFIX=${BaseDir}/redis${PORT} install
+make -j $(nproc) PREFIX=${baseDir}/redis${PORT} install
 
 # config file
-\cp -f ${workDIR}/redis.conf ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
-sed -i "s/-{PASSWORD}-/${password}/g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
-sed -i "s/-{PORT}-/${PORT}/g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
-sed -i "s#-{DATADIR}-#${DataDir}/redis${PORT}#g" ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf
+\cp -f ${workDIR}/redis.conf ${baseDir}/redis${PORT}/etc/redis${PORT}.conf
+sed -i "s/-{PASSWORD}-/${password}/g" ${baseDir}/redis${PORT}/etc/redis${PORT}.conf
+sed -i "s/-{PORT}-/${PORT}/g" ${baseDir}/redis${PORT}/etc/redis${PORT}.conf
+sed -i "s#-{DATADIR}-#${dataDir}/redis${PORT}#g" ${baseDir}/redis${PORT}/etc/redis${PORT}.conf
 
 # chown directory
-chown -R ${user}.${group} ${BaseDir}/redis${PORT}
-chown -R ${user}.${group} ${DataDir}/redis${PORT}
-chown -R ${user}.${group} ${LogDir}/redis
+chown -R ${user}.${group} ${baseDir}/redis${PORT}
+chown -R ${user}.${group} ${dataDir}/redis${PORT}
+chown -R ${user}.${group} ${logDir}/redis
 echo "Installed Successfully."
 
 # start redis
-su - ${user} -c "${BaseDir}/redis${PORT}/bin/redis-server ${BaseDir}/redis${PORT}/etc/redis${PORT}.conf"
+su - ${user} -c "${baseDir}/redis${PORT}/bin/redis-server ${baseDir}/redis${PORT}/etc/redis${PORT}.conf"
 echo "Started."

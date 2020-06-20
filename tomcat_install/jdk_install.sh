@@ -3,8 +3,8 @@ set -e
 
 # VARIABLES
 #=====================#
-user=yq94
-group=yq
+user=root
+group=root
 baseDir=/usr/local
 #=====================#
 
