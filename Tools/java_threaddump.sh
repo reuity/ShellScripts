@@ -11,7 +11,7 @@ if [[ $# < 1 && $# > 2 ]]; then
     exit 1
 fi
 
-# java home
+# check java home
 if [ -z ${JAVA_HOME} ]; then
     echo "JAVA_HOME is not exists!"
     exit 1
@@ -22,17 +22,17 @@ pid=$1
 linenum=$2
 date=$(date +%H%M)
 
+if [ -z ${linenum} ]; then
+    linenum=10
+fi
+
 # check if pid exists
 if test -z "$(${JAVA_HOME}/bin/jps -l | cut -d '' -f 1 | grep ${pid})"; then
     echo "process of ${pid} is not exists"
     exit 1
 fi
 
-# line number
-if [ -z ${linenum} ]; then
-    linenum=10
-fi
-
+# set output filename
 stackfile=${pid}-stack-${date}.dump
 threadsid=${pid}-threades-${date}.dump
 exceptionfile=${pid}-exceptionfile-${date}.dump
