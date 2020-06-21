@@ -7,8 +7,8 @@ package=$3
 
 # VARIABLES
 #==========================================#
-user=yq94
-group=yq
+user=root
+group=root
 jdkPKG=jdk-8u212-linux-x64.tar.gz
 baseDir=/usr/local
 logDir=/data/logs/tomcat_${appName}
