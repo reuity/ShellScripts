@@ -1,0 +1,28 @@
+filebeat.inputs:
+  - type: log
+    enable: true
+    paths:
+      - /data/logs/javamain/ogw-admin/*.log
+    multiline.pattern: ^\d{4}-\d{1,2}-\d{1,2}
+    multiline.negate: true
+    multiline.match: after
+    fields:
+      app_name: ogw-admin
+      server_ip: 30.115.11.65
+    fields_under_root: true
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 3
+
+setup.kibana:
+
+output.logstash:
+  hosts: ["30.115.9.115:5044"]
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
