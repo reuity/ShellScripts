@@ -21,11 +21,11 @@ CheckIPAddr() {
 }
 
 iplist=$1
-outfile=portscan$(date +%F-%T).txt
+outfile=portscan$(date +%F+%H%M%S).txt
 
 for ip in $(cat $iplist); do
     CheckIPAddr $ip &>/dev/null
     if [ $? = 0 ]; then
-        nmap -p 80-32767 $ip | head -n -3 | tail -n +7 | awk '{ print "'$ip'",$0}' >>$outfile
+        nmap -p 80-32767 $ip | head -n -3 | tail -n +7 | awk '{ print "'$ip'",$0}' | tee -a ${outfile}
     fi
 done

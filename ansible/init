@@ -1,0 +1,7 @@
+"Could not find or access 'sh'
+Searched in:
+\t/data/xjk/software/redis/files/sh
+\t/data/xjk/software/redis/sh
+\t/data/xjk/software/redis/files/sh
+\t/data/xjk/software/redis/sh on the Ansible Controller.
+If you are using a module and expect the file to exist on the remote, see the remote_src option"

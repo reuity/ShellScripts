@@ -26,6 +26,7 @@ mkdir -p ${dataDir}/redis_data${PORT}
 mkdir -p ${logDir}/redis
 
 # compile and install
+cd ${workDIR}
 fileName=$(tar -tf $1 | head -1 | cut -d/ -f1)
 tar -zxf ./$1
 cd ${fileName}
