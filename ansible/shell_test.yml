@@ -1,0 +1,19 @@
+tasks:
+  - name: install script run
+    shell:
+      cmd: sh test.sh
+      chdir: /data/test
+---
+tasks:
+  - name: install script run
+    shell: sh test.sh
+    args:
+      chdir: /data/test
+---
+tasks:
+  - name: install script run
+    shell: |
+      sh test.sh
+      ls
+    args:
+      chdir: /data/test
