@@ -49,7 +49,7 @@ chown postgres.postgres postgresql.conf
 su - postgres -c '/usr/local/pgsql/bin/pg_ctl -D /data/postgres -l logfile start'
 
 # 9 连接测试
-# pgsql
+# psql
 # postgres=#
 # \l
 # show wal_level;
