@@ -1,6 +1,10 @@
 filebeat.inputs:
+  # - type: stdin
+  #   #enabled: true
+  #   enabled: false
+
   - type: log
-    enable: true
+    enabled: true
     paths:
       - /data/logs/javamain/ogw-admin/*.log
     multiline.pattern: ^\d{4}-\d{1,2}-\d{1,2}
@@ -19,6 +23,10 @@ setup.template.settings:
   index.number_of_shards: 3
 
 setup.kibana:
+
+# output.console:
+#   pretty: true
+#   enabled: false
 
 output.logstash:
   hosts: ["30.115.9.115:5044"]
