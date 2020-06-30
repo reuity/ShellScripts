@@ -1,0 +1,53 @@
+{
+    "settings": {
+        "index": {
+            "codec": "best_compression",
+            "number_of_shards": "1",
+            "number_of_replicas": "1",
+            "max_result_window": 2000000000
+        }
+    },
+    "mappings": {
+        "doc": {
+            "properties": {
+                "app_name": {
+                    "index": "true",
+                    "type": "keyword"
+                },
+                "trace_id": {
+                    "index": "true",
+                    "type": "keyword"
+                },
+                "org_id": {
+                    "index": "true",
+                    "type": "keyword"
+                },
+                "log_date": {
+                    "format": "yyyy-MM-dd HH:mm:ss.SSS || epoch_millis",
+                    "type": "date"
+                },
+                "server_ip": {
+                    "index": "true",
+                    "type": "keyword"
+                },
+                "log_level": {
+                    "index": "true",
+                    "type": "keyword"
+                },
+                "thread": {
+                    "index": "true",
+                    "type": "keyword"
+                },
+                "content": {
+                    "index": "true",
+                    "type": "keyword",
+                    "ignore_above": 32766
+                }
+            }
+        }
+    },
+    "index_patterns": [
+        "log-platform-app*"
+    ],
+    "order": 0
+}
