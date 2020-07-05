@@ -1,0 +1,19 @@
+---
+- hosts: javaapp
+  remote_user: root
+  gather_facts: no
+  tasks: 
+    - name: create group 
+      group: 
+        name: wls
+        gid: 602
+        state: present
+    - name: createuser
+      user: 
+        name: wls81
+        uid: 602
+        group: wls
+        home: /wls/wls81
+        shell: /bin/bash
+        state: present
+

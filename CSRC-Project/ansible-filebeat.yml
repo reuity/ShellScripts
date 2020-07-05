@@ -1,0 +1,23 @@
+ansible javaapp -m file -a "path=/data/logs/go state=directory owner=wls81 group=wls" 
+ansible javaapp -m copy -a "src=filebeat_restart.sh dest=/wls/wls81/filebeat_restart.sh backup=yes owner=wls81 group=wls mode=0655"
+
+
+ansible javaapp -m file -a "path=/usr/local/filebeat-6.8.8-linux-x86_64 owner=wls81 group=wls"
+ansible javaapp -m copy -a "dest=/usr/local/filebeat-6.8.8-linux-x86_64/filebeat.yml src=filebeat.yml backup=yes owner=wls81 group=wls"
+
+
+
+---
+- hosts: javaapp
+  remote_user: root
+  gather_facts: no
+  tasks:
+    - name: mkdir
+      file: 
+        path: "{{ item }}"
+        state: directory
+        owner: wls81
+        group: wls
+      loop: 
+        - 
+

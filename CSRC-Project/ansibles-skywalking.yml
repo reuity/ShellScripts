@@ -1,0 +1,32 @@
+---
+- hosts: javaapp
+  remote_user: root
+  gather_facts: no
+  tasks:
+    - name: mkdir
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: wls81
+        group: wls
+      loop:
+        - /data/xjk/software
+        - /data/xjk/static
+
+    - name: copy
+      copy:
+        src: /data/xjk/javamain/200629/skywalking-agent.7z
+        dest: /data/xjk/software/skywalking-agent.7z
+
+    - name: decompress
+      shell: 7za x -y /data/xjk/software/skywalking-agent.7z -o/data/xjk/static/
+
+    - name: chown
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: wls81
+        group: wls
+        recurse: yes
+      loop:
+        - /data/xjk/static

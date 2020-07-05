@@ -1,0 +1,18 @@
+---
+- hosts: 10.132.4.190
+  remote_user: root
+  tasks:
+      - name: crete software dir
+        file:
+            path: /data/xjk/software/pgsql
+            state: directory
+      - name: transfer files
+        copy:
+            src: /data/xjk/software/pgsql/{{ item }}
+            dest: /data/xjk/software/pgsql/{{ item }}
+        with_items:
+            - postgresql-10.4.tar.gz
+            - postgresql.conf
+      - name: install pgsql
+        script:
+            /data/xjk/software/pgsql/pgsql10.4_install.sh
