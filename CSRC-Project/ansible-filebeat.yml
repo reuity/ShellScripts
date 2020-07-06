@@ -1,23 +1,42 @@
-ansible javaapp -m file -a "path=/data/logs/go state=directory owner=wls81 group=wls" 
-ansible javaapp -m copy -a "src=filebeat_restart.sh dest=/wls/wls81/filebeat_restart.sh backup=yes owner=wls81 group=wls mode=0655"
-
-
-ansible javaapp -m file -a "path=/usr/local/filebeat-6.8.8-linux-x86_64 owner=wls81 group=wls"
-ansible javaapp -m copy -a "dest=/usr/local/filebeat-6.8.8-linux-x86_64/filebeat.yml src=filebeat.yml backup=yes owner=wls81 group=wls"
-
-
-
 ---
 - hosts: javaapp
   remote_user: root
   gather_facts: no
   tasks:
+    - name: transfer package
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: wls81
+        group: wls
+        backup: yes
+      loop:
+        - {
+            src: "ilebeat-6.8.8-linux-x86_64.tar.gz",
+            dest: "/data/xjk/software/es/filebeat-6.8.8-linux-x86_64.tar.gz",
+          }
+        - { src: "filebeat_restart.sh", dest: "/wls/wls81" }
+
+    - name: decompress
+      shell:
+        cmd: 7za x /data/xjk/software/es/filebeat-6.8.8-linux-x86_64.tar.gz -o/usr/local
+
+    - name: set filebeat
+      copy:
+        src: filebeat.yml
+        dest: /usr/local/filebeat-6.8.8-linux-x86_64/filebeat.yml
+        owner: wls81
+        group: wls
+        backup: yes
+
     - name: mkdir
-      file: 
+      file:
         path: "{{ item }}"
         state: directory
         owner: wls81
         group: wls
-      loop: 
-        - 
-
+        recurse: yes
+      loop:
+        - /data/logs/go/filebeat/
+        - /data/xjk/software/es/
+        - /usr/local/filebeat-6.8.8-linux-x86_64/

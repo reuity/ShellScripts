@@ -1,0 +1,36 @@
+filebeat.inputs:
+  # - type: stdin
+  #   #enabled: true
+  #   enabled: false
+
+  - type: log
+    enabled: true
+    paths:
+      - /data/logs/javamain/xxxxxx/*.log
+    multiline.pattern: ^\d{4}-\d{1,2}-\d{1,2}
+    multiline.negate: true
+    multiline.match: after
+    fields:
+      app_name: xxxxxx
+      server_ip: yyyyyy
+    fields_under_root: true
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+setup.template.settings:
+  index.number_of_shards: 3
+
+setup.kibana:
+
+# output.console:
+#   pretty: true
+#   enabled: false
+
+output.logstash:
+  hosts: ["10.132.5.129:5044","10.132.5.130:5044","10.132.5.131:5044"]
+
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
