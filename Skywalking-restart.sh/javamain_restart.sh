@@ -8,7 +8,7 @@ appName=scf-external-services-server
 envName=stg
 config="/data/xjk/javamain/config/$subSystem/$appName"
 
-processGrepKey="${appName}-${envName}.jar"
+processKey="${appName}-${envName}.jar"
 startDir=${jarpath}/${subSystem}/${appName}_${envName}
 startCmd="nohup /usr/local/jdk/bin/java -jar ${appName}-${envName}.${packagetype} &>/data/logs/javamain/${appName}.log &"
 

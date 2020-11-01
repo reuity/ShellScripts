@@ -32,6 +32,7 @@ case $1 in
     else
         echo "Installing..."
         tar -zxf $1 -C ${baseDir}
+        chown -R ${user}.${group} ${baseDir}/${fileName}
         ln -snf ${baseDir}/${fileName} ${baseDir}/jdk
         sed -i "/^[^#]/{/JAVA_HOME/d}" /etc/profile
         echo -e "\nexport JAVA_HOME=${baseDir}/jdk" \
