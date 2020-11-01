@@ -1,0 +1,64 @@
+---
+- hosts: 10.132.5.150
+  remote_user: root
+  gather_facts: no
+  tasks:
+    - name: mkdir
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: wls81
+        group: wls
+        recurse: yes
+      loop:
+        - /data/logs/go/filebeat/
+        - /data/xjk/software/es/
+
+    - name: transfer package
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: wls81
+        group: wls
+        backup: yes
+      loop:
+        - {
+            src: "filebeat-6.8.8-linux-x86_64.tar.gz",
+            dest: "/data/xjk/software/es/filebeat-6.8.8-linux-x86_64.tar.gz",
+          }
+        - { src: "filebeat_restart.sh", dest: "/wls/wls81" }
+
+    - name: chmod restart script
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: wls81
+        group: wls
+        mode: 0755
+        recurse: yes
+      loop:
+        - /usr/local/filebeat-6.8.8-linux-x86_64/
+
+    - name: decompress
+      shell:
+        cmd: tar -zxf /data/xjk/software/es/filebeat-6.8.8-linux-x86_64.tar.gz -C /usr/local
+
+    - name: set filebeat
+      copy:
+        src: filebeat.yml
+        dest: /usr/local/filebeat-6.8.8-linux-x86_64/filebeat.yml
+        owner: wls81
+        group: wls
+        backup: yes
+
+    - name: mkdir
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: wls81
+        group: wls
+        recurse: yes
+      loop:
+        - /usr/local/filebeat-6.8.8-linux-x86_64/
+
+        

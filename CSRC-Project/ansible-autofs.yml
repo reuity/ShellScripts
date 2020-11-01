@@ -1,0 +1,30 @@
+---
+- hosts: 10.132.5.191
+  remote_user: root
+  gather_facts: no
+  tasks:
+    - name: install yum package
+      yum:
+        name: "{{ item }}"
+        state: installed
+      loop:
+        - nfs-utils
+        - rpcbind
+        - autofs
+
+    - name: copy config
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: wls81
+        group: wls
+        backup: yes
+      loop:
+        - { src: "auto.master", dest: "/etc/auto.master" }
+        - { src: "auto.nfsc", dest: "/etc/auto.nfsc" }
+
+    - name: start service
+      service:
+        name: autofs
+        state: started
+        enabled: yes

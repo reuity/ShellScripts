@@ -1,0 +1,64 @@
+---
+- hosts: 10.132.5.137
+  remote_user: root
+  gather_facts: no
+  tasks:
+    - name: create group
+      group:
+        name: "{{ item.name }}"
+        gid: "{{ item.gid }}"
+        state: "{{ item.state }}"
+      loop:
+        - { name: "wls", gid: 602, state: "present" }
+        - { name: "log", gid: 603, state: "present" }
+
+    - name: createuser
+      user:
+        name: "{{ item.name }}"
+        uid: "{{ item.uid }}"
+        group: "{{ item.group }}"
+        home: "{{ item.home }}"
+        shell: "{{ item.shell }}"
+        state: present
+      loop:
+        - {
+            name: "wls81",
+            uid: 602,
+            group: "wls",
+            home: "/wls/wls81",
+            shell: "/bin/bash",
+          }
+        - {
+            name: "logop",
+            uid: 603,
+            group: "log",
+            home: "/wls/logop",
+            shell: "/bin/bash",
+          }
+
+    - name: create directory
+      file:
+        path: "{{ item.path }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        state: directory
+        mode: 0755
+        recurse: no
+      loop:
+        - { path: "/wls/wls81", owner: wls81, group: wls }
+        - { path: "/wls/logop", owner: logop, group: log }
+        - { path: "/data", owner: root, group: root }
+        - { path: "/data/xjk", owner: root, group: root }
+        - { path: "/data/xjk/software", owner: root, group: root }
+        - { path: "/data/logs", owner: root, group: root }
+
+    - name: change owner
+      file:
+        path: "{{ item.path }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        state: directory
+        recurse: yes
+      loop:
+        - { path: "/wls/wls81", owner: wls81, group: wls }
+        - { path: "/wls/logop", owner: logop, group: log }
